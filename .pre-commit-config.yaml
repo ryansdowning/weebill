@@ -3,16 +3,14 @@ repos:
     hooks:
       - id: tinybird-format
         name: Tinybird Format
-        entry: bash -c 'for file in "$@"; do echo "Formatting $file"; uv run tb fmt "$file" --yes; done'
+        entry: ./tb-fmt.sh
         language: system
-        files: ^(?!lib/).*\.(pipe|datasource|incl)$
-        pass_filenames: true
-        stages: [commit]
+        always_run: true
+        pass_filenames: false
 
       - id: tinybird-check
         name: Tinybird Check
-        entry: bash -c 'for file in "$@"; do echo "Checking $file"; if ! uv run tb check "$file"; then echo "Tinybird check failed on $file"; exit 1; fi; done'
+        entry: ./tb-check.sh
         language: system
-        files: ^(?!lib/).*\.(pipe|datasource|incl)$
-        pass_filenames: true
-        stages: [commit]
+        always_run: true
+        pass_filenames: false
