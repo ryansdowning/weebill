@@ -4,7 +4,7 @@ DESCRIPTION >
 NODE vehicles_by_ranges_node
 SQL >
     %
-    SELECT 
+    SELECT
         vin__1_10_,
         make,
         model,
@@ -16,21 +16,22 @@ SQL >
         county,
         state
     FROM rows
-    WHERE 1=1
-    {% if defined(ranges) %}
-    AND (0
-        {% for range_val in ranges %}
-            OR ({% if "min" not in range_val or range_val["min"] is None %}1
-        {% else %}{{ electric_range }} >= {{ range_val["min"] }}
+    WHERE
+        1 = 1 AND 1 = 1
+        {% if defined(ranges) %}
+            AND (
+                0
+                {% for range_val in ranges %}
+                    OR (
+                        {% if "min" not in range_val or range_val["min"] is None %}1
+                        {% else %}{{ electric_range }} >= {{ range_val["min"] }}
+                        {% end %} AND {% if "max" not in range_val or range_val["max"] is None %} 1
+                        {% else %} {electric_range} <= {{ range_val["max"] }}
+                        {% end %}
+                    )
+                {% end %}
+            )
+        {% else %}
         {% end %}
-        AND {% if "max" not in range_val or range_val["max"] is None %} 1
-        {% else %} { electric_range } <= {{ range_val["max"] }}
-        {% end %})
-        {% end %})
-    {% else %}
-    1=1
-    {% end %}
     ORDER BY electric_range DESC, make ASC, model ASC
-    LIMIT {{Int32(limit, 1000)}}
-
-TYPE ENDPOINT
+    LIMIT {{ Int32(limit, 1000) }}

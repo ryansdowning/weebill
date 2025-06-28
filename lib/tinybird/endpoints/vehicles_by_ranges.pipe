@@ -16,8 +16,8 @@ SQL >
         county,
         state
     FROM rows
-    WHERE 1=1
-    {%% if_defined('ranges', f"AND {get_ranges_filter('electric_range', 'ranges')}", '1=1') %%}
+    WHERE 1=1 AND 1=1
+    {%% if_defined('ranges', f"AND {get_ranges_filter('electric_range', 'ranges')}", '') %%}
     ORDER BY electric_range DESC, make ASC, model ASC
     LIMIT {{Int32(limit, 1000)}}
 
