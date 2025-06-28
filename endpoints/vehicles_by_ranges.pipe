@@ -24,9 +24,9 @@ SQL >
                 {% for range_val in ranges %}
                     OR (
                         {% if "min" not in range_val or range_val["min"] is None %}1
-                        {% else %}{{ electric_range }} >= {{ range_val["min"] }}
+                        {% else %}electric_range >= {{ range_val["min"] }}
                         {% end %} AND {% if "max" not in range_val or range_val["max"] is None %} 1
-                        {% else %} {{ electric_range }} <= {{ range_val["max"] }}
+                        {% else %} electric_range <= {{ range_val["max"] }}
                         {% end %}
                     )
                 {% end %}

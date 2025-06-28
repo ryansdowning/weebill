@@ -9,10 +9,10 @@ def get_ev_type_filter() -> str:
 def get_range_filter(col_name: str, range_var_name: str) -> str:
     return f"""
         ({{% if "min" not in {range_var_name} or {range_var_name}["min"] is None %}}1
-        {{% else %}}{{{{ {col_name} }}}} >= {{{{ {range_var_name}["min"] }}}}
+        {{% else %}} {col_name} >= {{{{ {range_var_name}["min"] }}}}
         {{% end %}}
         AND {{% if "max" not in {range_var_name} or {range_var_name}["max"] is None %}} 1
-        {{% else %}} {{{{ {col_name} }}}} <= {{{{ {range_var_name}["max"] }}}}
+        {{% else %}} {col_name} <= {{{{ {range_var_name}["max"] }}}}
         {{% end %}})
     """.strip()
 
