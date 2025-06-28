@@ -6,7 +6,6 @@ import re
 WEEBILL_REGEX = r"{%%\s*(.+?)\s*%%}"
 
 def build_weebill(input_dir: str, output_dir: str) -> None:
-    # Recurse over all files in the input directory
     for file in Path(input_dir).rglob("*"):
         if file.is_file():
             with open(file, "r") as fp:
