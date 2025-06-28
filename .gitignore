@@ -1,2 +1,3 @@
 .tinyb
 .env.local
+*.pyc
