@@ -1,0 +1,27 @@
+
+DESCRIPTION >
+    Returns EV models ranked by count, with optional filtering by EV type and customizable limit
+
+NODE ranked_ev_models_node
+SQL >
+    %
+    SELECT
+        make,
+        model,
+        electric_vehicle_type,
+        count() AS model_count
+    FROM rows
+    WHERE 1=1
+    {% if defined(ev_type) %}
+        AND electric_vehicle_type = {{String(ev_type, '')}}
+    {% end %}
+    GROUP BY
+        make,
+        model,
+        electric_vehicle_type
+    ORDER BY
+        model_count DESC
+    LIMIT {{Int32(limit, 100)}}
+
+TYPE ENDPOINT
+        
