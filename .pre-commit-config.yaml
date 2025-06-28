@@ -3,14 +3,14 @@ repos:
     hooks:
       - id: tinybird-format
         name: Tinybird Format
-        entry: bash -c 'files=$(echo "$@" | tr " " "\n" | grep -E "\.pipe$|\.datasource$|\.incl$" | grep -v "^lib/"); if [ -n "$files" ]; then echo "$files" | while IFS= read -r file; do echo "Formatting $file"; uv run tb fmt "$file" --yes; done; fi'
+        entry: bash -c 'for file in "$@"; do echo "Formatting $file"; uv run tb fmt "$file" --yes; done'
         language: system
         files: ^(?!lib/).*\.(pipe|datasource|incl)$
         pass_filenames: true
 
       - id: tinybird-check
         name: Tinybird Check
-        entry: bash -c 'files=$(echo "$@" | tr " " "\n" | grep -E "\.pipe$|\.datasource$|\.incl$" | grep -v "^lib/"); if [ -n "$files" ]; then for file in $files; do echo "Checking $file"; if ! uv run tb check "$file"; then echo "Tinybird check failed on $file"; exit 1; fi; done; fi'
+        entry: bash -c 'for file in "$@"; do echo "Checking $file"; if ! uv run tb check "$file"; then echo "Tinybird check failed on $file"; exit 1; fi; done'
         language: system
         files: ^(?!lib/).*\.(pipe|datasource|incl)$
         pass_filenames: true
