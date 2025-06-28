@@ -18,7 +18,7 @@ SQL >
     FROM rows
     WHERE 1=1
     {% if defined(ranges) %}
-        AND (0
+    AND (0
         {% for range_val in ranges %}
             OR ({% if "min" not in range_val or range_val["min"] is None %}1
         {% else %}{{ electric_range }} >= {{ range_val["min"] }}
@@ -27,6 +27,8 @@ SQL >
         {% else %} { electric_range } <= {{ range_val["max"] }}
         {% end %})
         {% end %})
+    {% else %}
+    1=1
     {% end %}
     ORDER BY electric_range DESC, make ASC, model ASC
     LIMIT {{Int32(limit, 1000)}}

@@ -17,9 +17,7 @@ SQL >
         state
     FROM rows
     WHERE 1=1
-    {% if defined(ranges) %}
-        AND {%% get_ranges_filter('electric_range', 'ranges') %%}
-    {% end %}
+    {%% if_defined('ranges', f"AND {get_ranges_filter('electric_range', 'ranges')}", '1=1') %%}
     ORDER BY electric_range DESC, make ASC, model ASC
     LIMIT {{Int32(limit, 1000)}}
 
