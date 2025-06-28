@@ -1,0 +1,26 @@
+DESCRIPTION >
+    Returns vehicles filtered by a list of electric range specifications. Each range can have optional min and max values.
+
+NODE vehicles_by_ranges_node
+SQL >
+    %
+    SELECT 
+        vin__1_10_,
+        make,
+        model,
+        model_year,
+        electric_vehicle_type,
+        electric_range,
+        base_msrp,
+        city,
+        county,
+        state
+    FROM rows
+    WHERE 1=1
+    {% if defined(ranges) %}
+        AND {%% get_ranges_filter('electric_range', 'ranges') %%}
+    {% end %}
+    ORDER BY electric_range DESC, make ASC, model ASC
+    LIMIT {{Int32(limit, 1000)}}
+
+TYPE ENDPOINT
