@@ -1,6 +1,3 @@
-
 NODE endpoint
 SQL >
     SELECT * from rows
-TYPE ENDPOINT
-            
