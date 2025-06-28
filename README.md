@@ -13,3 +13,20 @@ Experimenting with Tinybird-Python-Jinja clickhouse query generation.
     is written to the `/lib/tinybird/` files.
   - Escape into python-land from tinybird/clickhouse by using the `{%% <python-code-here> %%}` syntax.
   - Do not worry about python imports, that is all handled for you by the build process.
+
+## Development Setup
+
+### Pre-commit Hooks
+
+```bash
+uv install
+uv run pre-commit install
+```
+
+The pre-commit hooks will:
+
+- Format Tinybird files (`.pipe`, `.datasource`, `.incl`) using `tb fmt`
+- Validate Tinybird files using `tb check`
+- Only process files in root directories (excludes `/lib` directory)
+
+If formatting makes changes, you'll need to stage the changes and commit again.
