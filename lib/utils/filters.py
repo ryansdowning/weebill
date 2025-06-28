@@ -12,7 +12,7 @@ def get_range_filter(col_name: str, range_var_name: str) -> str:
         {{% else %}}{{{{ {col_name} }}}} >= {{{{ {range_var_name}["min"] }}}}
         {{% end %}}
         AND {{% if "max" not in {range_var_name} or {range_var_name}["max"] is None %}} 1
-        {{% else %}} {{ {col_name} }} <= {{{{ {range_var_name}["max"] }}}}
+        {{% else %}} {{{{ {col_name} }}}} <= {{{{ {range_var_name}["max"] }}}}
         {{% end %}})
     """.strip()
 
