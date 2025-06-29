@@ -7,13 +7,13 @@ if ! uv run python -m lib.build; then
 fi
 
 echo "Running Tinybird format..."
-if ! ./tb-fmt.sh; then
+if ! ./tb-fmt.sh --all; then
   echo "Format failed. Exiting."
   exit 1
 fi
 
 echo "Running Tinybird check..."
-if ! ./tb-check.sh; then
+if ! ./tb-check.sh --all; then
   echo "Check failed. Exiting."
   exit 1
 fi

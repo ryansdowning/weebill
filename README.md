@@ -14,6 +14,79 @@ Experimenting with Tinybird-Python-Jinja clickhouse query generation.
   - Escape into python-land from tinybird/clickhouse by using the `{%% <python-code-here> %%}` syntax.
   - Do not worry about python imports, that is all handled for you by the build process.
 
+## Example Usage
+
+This example shows how to use Python functions within Tinybird pipes to create reusable query logic.
+
+### Creating a Range Filter Endpoint
+
+The `vehicles_by_ranges` endpoint demonstrates using Python utility functions in Tinybird queries:
+
+**Weebill pipe** (`lib/tinybird/endpoints/vehicles_by_ranges.pipe`):
+
+```sql
+NODE vehicles_by_ranges_node
+SQL >
+    %
+    SELECT
+        vin__1_10_,
+        make,
+        model,
+        model_year,
+        electric_vehicle_type,
+        electric_range,
+        base_msrp,
+        city,
+        county,
+        state
+    FROM rows
+    WHERE 1=1
+    {%% if_defined('ranges', f"AND {get_ranges_filter('electric_range', 'ranges')}", '') %%}
+    ORDER BY electric_range DESC, make ASC, model ASC
+    LIMIT {{Int32(limit, 1000)}}
+
+TYPE ENDPOINT
+```
+
+**Generated Tinybird pipe:**
+
+```sql
+NODE vehicles_by_ranges_node
+SQL >
+    %
+    SELECT
+        vin__1_10_,
+        make,
+        model,
+        model_year,
+        electric_vehicle_type,
+        electric_range,
+        base_msrp,
+        city,
+        county,
+        state
+    FROM rows
+    WHERE
+        1 = 1
+        {% if defined(ranges) %}
+            AND (
+                0
+                {% for range_val in ranges %}
+                    OR (
+                        {% if "min" not in range_val or range_val["min"] is None %}1
+                        {% else %}electric_range >= {{ range_val["min"] }}
+                        {% end %} AND {% if "max" not in range_val or range_val["max"] is None %} 1
+                        {% else %} electric_range <= {{ range_val["max"] }}
+                        {% end %}
+                    )
+                {% end %}
+            )
+        {% else %}
+        {% end %}
+    ORDER BY electric_range DESC, make ASC, model ASC
+    LIMIT {{ Int32(limit, 1000) }}
+```
+
 ## Development Setup
 
 ### Pre-commit Hooks
