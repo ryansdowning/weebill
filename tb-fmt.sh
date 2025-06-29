@@ -18,9 +18,14 @@ if [ -n "$files" ]; then
     uv run tb fmt "$file" --yes
   done
 
-  # Check if there are any changes after formatting (only for staged files mode)
-  if [ "$1" != "--all" ] && ! git diff --quiet; then
-    echo "Tinybird format made changes. Please stage the changes before committing."
-    exit 1
+  # Check if there are any changes to the formatted files (only for staged files mode)
+  if [ "$1" != "--all" ]; then
+    for file in $files; do
+      if ! git diff --quiet -- "$file"; then
+        echo "Tinybird format made changes to: $file"
+        echo "Please stage the changes before committing."
+        exit 1
+      fi
+    done
   fi
 fi
